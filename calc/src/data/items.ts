@@ -875,8 +875,16 @@ const BERRIES: {[berry: string]: {t: I.TypeName; p: number}} = {
 
 export const MEGA_STONES = Object.assign({}, GEN_6_MEGA_STONES, ZA_MEGA_STONES);
 
+const GLACE = SV.concat([
+  '',
+]);
+
+const TM = SV.concat([
+  'Wishing Stone',
+]);
+
 export const ITEMS = [CHAMPIONS, RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV, RBY, BWYB, TH, MH, SV, SV,
-  SV, SV, SV, SV, SV, SV, XY, IF, SV, SV]; // NewGenChange
+  SV, SV, SV, SV, SV, SV, XY, IF, SV, SV, GLACE, TM]; // NewGenChange
 
 export class Items implements I.Items {
   private readonly gen: I.GenerationNum;

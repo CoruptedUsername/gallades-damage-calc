@@ -30,7 +30,7 @@ export interface MoveData {
 
   readonly bp: number;
   readonly zp?: number;
-  readonly maxPower?: number;
+  maxPower?: number;
 
   // FIXME: migrate these to flags (above) instead
   readonly makesContact?: boolean;
@@ -5645,7 +5645,7 @@ const TS: {[name: string]: MoveData} = extend(true, {}, SV, TS_PATCH);
 const PM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Blood Stream': {
     bp: 85,
-    type: 'Water',
+    type: 'Poison',
     category: 'Special',
     drain: [1, 2],
   },
@@ -7636,17 +7636,1148 @@ const CHAMPIONS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Triple Dive': {bp: 35},
   'Trop Kick': {bp: 85},
 };
-
 const CHAMPIONS: {[name: string]: MoveData} = extend(
   true, {},
   Object.fromEntries(CHAMPIONS_LIST.map(m => [m, SV[m]])), CHAMPIONS_PATCH
 );
 
+const GLACE_PATCH: {[name: string]: DeepPartial<MoveData>} = {
+  '5 Big Dooms': {
+    bp: 28,
+    category: 'Special',
+    type: 'Dark',
+    multihit: 5,
+    isFuture: true,
+  },
+  'Abomination\'s Jig': {
+    bp: 80,
+    category: 'Physical',
+    type: 'Silly',
+    isDance: true,
+    secondaries: true,
+  },
+  'Absolute Zero': {
+    bp: 80,
+    category: 'Special',
+    type: 'Ice',
+    secondaries: true,
+  },
+  'Acid Rain': {
+    bp: 0,
+    category: 'Status',
+    type: 'Lemon',
+    secondaries: true,
+  },
+  'Advertising': {
+    bp: 25,
+    category: 'Special',
+    type: 'Electric',
+    multihit: [3, 5],
+  },
+  'Air Horn': {
+    bp: 55,
+    category: 'Special',
+    type: 'Silly',
+    isSound: true,
+  },
+  'An Offer You Can\'t Refuse': {
+    bp: 90,
+    category: 'Physical',
+    type: 'Bug',
+    secondaries: true,
+  },
+  'Anchor Shot': {
+    isFishing: true,
+  },
+  'Anvil Drop': {
+    bp: 80,
+    category: 'Physical',
+    type: 'Steel',
+    secondaries: true,
+    isFuture: true,
+  },
+  'Arrows of Light': {
+    bp: 185,
+    category: 'Physical',
+    type: 'Fighting',
+    isZ: true,
+    secondaries: true,
+  },
+  'Ash Flick': {
+    bp: 65,
+    category: 'Physical',
+    type: 'Fire',
+    secondaries: true,
+  },
+  'Avalanche': {
+    isDisaster: true,
+  },
+  'awesome Earthquake': {
+    bp: 110,
+    category: 'Physical',
+    type: 'Silly',
+  },
+  'awesomemove': {
+    bp: 95,
+    category: 'Special',
+    type: 'Stellar',
+  },
+  'Axe Kick': {
+    isKick: true,
+  },
+  'Baking Blast': {
+    bp: 100,
+    type: 'Silly',
+    category: 'Physical',
+    isBullet: true,
+    secondaries: true,
+    priority: -3,
+  },
+  'Balatro Blast': {
+    bp: 40,
+    type: 'Silly',
+    category: 'Special',
+  },
+  'Big Bash': {
+    bp: 68,
+    type: 'Normal',
+    category: 'Physical',
+  },
+  'Big Buckler': {
+    bp: 85,
+    type: 'Fairy',
+    category: 'Physical',
+  },
+  'Blaze Kick': {
+    isKick: true,
+  },
+  'Blazeball': {
+    bp: 160,
+    type: 'Fire',
+    category: 'Special',
+    isBullet: true,
+  },
+  'Bleakwind Storm': {
+    isDisaster: true,
+  },
+  'Blinding Squirter': {
+    bp: 0,
+    type: 'Lemon',
+    category: 'Status',
+  },
+  'Blizzard': {
+    isDisaster: true,
+  },
+  'Bloom Desire': {
+    bp: 0,
+    type: 'Grass',
+    category: 'Status',
+    isFuture: true,
+  },
+  'Blue Shell': {
+    bp: 150,
+    type: 'Silly',
+    category: 'Physical',
+  },
+  'Brainrot Cudgel': {
+    bp: 80,
+    type: 'Silly',
+    category: 'Physical',
+    willCrit: true,
+  },
+  'Bravest Bird': {
+    bp: 150,
+    type: 'Flying',
+    category: 'Physical',
+    recoil: [1, 2],
+    secondaries: true,
+    makesContact: true,
+  },
+  'Campfire': {
+    bp: 0,
+    type: 'Fire',
+    category: 'Status',
+    isFishing: true,
+  },
+  'Catchy Song': {
+    bp: 0,
+    type: 'Silly',
+    category: 'Status',
+    isSound: true,
+  },
+  'Chaos Potion': {
+    bp: 0,
+    type: 'Psychic',
+    category: 'Status',
+    priority: 2,
+  },
+  'Chocolate Kiss': {
+    bp: 40,
+    type: 'Fairy',
+    category: 'Physical',
+    makesContact: true,
+    secondaries: true,
+    priority: 1,
+  },
+  'Citron': {
+    bp: 80,
+    type: 'Lemon',
+    category: 'Special',
+    target: 'allAdjacentFoes',
+    isSound: true,
+  },
+  'CITRON OVERLOAD': {
+    bp: 145,
+    type: 'Lemon',
+    category: 'Special',
+    isSound: true,
+    target: 'allAdjacentFoes',
+    secondaries: true,
+  },
+  'Citrus Bomb': {
+    bp: 60,
+    type: 'Lemon',
+    category: 'Special',
+    isBullet: true,
+    secondaries: true,
+  },
+  'Citrus Rend': {
+    bp: 70,
+    type: 'Lemon',
+    category: 'Physical',
+    isBite: true,
+  },
+  'Clash': {
+    bp: 100,
+    type: 'Fighting',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Corrosive Gus': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+  },
+  'Court Change': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+  },
+  'cuddle': {
+    bp: 0,
+    type: 'Friend',
+    category: 'Status',
+  },
+  'Death Grip': {
+    bp: 90,
+    type: 'Dark',
+    category: 'Physical',
+    makesContact: true,
+    secondaries: true,
+  },
+  'Decoy Anvil': {
+    bp: 110,
+    type: 'Silly',
+    category: 'Special',
+  },
+  'Diamond Hatchet': {
+    bp: 100,
+    type: 'Fighting',
+    category: 'Physical',
+    isSlicing: true,
+    secondaries: true,
+  },
+  'Draco Meteor': {
+    isDisaster: true,
+  },
+  'Doom Desire': {
+    isFuture: true,
+  },
+  'Double Kick': {
+    isKick: true,
+  },
+  'Dragon Flurry': {
+    bp: 25,
+    type: 'Dragon',
+    category: 'Physical',
+    multihit: [2, 5],
+    makesContact: true,
+    isPunch: true,
+  },
+  'Drippy Blade': {
+    bp: 120,
+    type: 'Water',
+    category: 'Special',
+    overrideDefensiveStat: 'def',
+    makesContact: true,
+    isSlicing: true,
+  },
+  'Earthquake': {
+    isDisaster: true,
+  },
+  'Eat My Shorts!': {
+    bp: 85,
+    type: 'Lemon',
+    category: 'Special',
+    secondaries: true,
+  },
+  'Enchanted Boomerang': {
+    bp: 50,
+    type: 'Fairy',
+    category: 'Physical',
+    multihit: 2,
+  },
+  'Energy Tank': {
+    bp: 0,
+    type: 'Steel',
+    category: 'Status',
+    priority: 3,
+  },
+  'Ephemeral Prism': {
+    bp: 105,
+    type: 'Stellar',
+    category: 'Special',
+  },
+  'Epic Beam': {
+    bp: 300,
+    type: 'Normal',
+    category: 'Special',
+  },
+  'Eruption': {
+    isDisaster: true,
+  },
+  'Everstorm Halberd': {
+    bp: 0,
+    type: 'Dragon',
+    category: 'Physical',
+    priority: -2,
+  },
+  'EVIL SCARY U-Turn': {
+    bp: 70,
+    type: 'Dark',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Feebas Pro Shops': {
+    bp: 85,
+    type: 'Fighting',
+    category: 'Special',
+    isFishing: true,
+  },
+  'Fertile Soil': {
+    bp: 0,
+    type: 'Grass',
+    category: 'Status',
+  },
+  'Fiend Fire': {
+    bp: 50,
+    type: 'Fire',
+    category: 'Special',
+  },
+  'Fish and Dip': {
+    bp: 0,
+    type: 'Water',
+    category: 'Status',
+    isFishing: true,
+  },
+  'Fish Burn': {
+    bp: 60,
+    type: 'Fire',
+    category: 'Special',
+    isFishing: true,
+  },
+  'Fish Eater': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+    isFishing: true,
+  },
+  'Fish Mortar': {
+    bp: 120,
+    type: 'Water',
+    category: 'Special',
+    isFishing: true,
+    isFuture: true,
+  },
+  'Fish Processing': {
+    bp: 0,
+    type: 'Steel',
+    category: 'Status',
+    isFishing: true,
+  },
+  'Fishield': {
+    bp: 0,
+    type: 'Water',
+    category: 'Status',
+    priority: 4,
+    isProtect: true,
+    isFishing: true,
+  },
+  'Fishing Minigame': {
+    bp: 90,
+    type: 'Water',
+    category: 'Physical',
+    isFishing: true,
+  },
+  'Fishing Terrain': {
+    bp: 0,
+    type: 'Water',
+    category: 'Status',
+  },
+  'Flotsam Hook': {
+    bp: 85,
+    type: 'Water',
+    category: 'Physical',
+  },
+  'Flush': {
+    bp: 90,
+    type: 'Water',
+    category: 'Special',
+  },
+  'Flytrap': {
+    bp: 70,
+    type: 'Grass',
+    category: 'Physical',
+  },
+  'Focus Blast': {
+    bp: 120,
+    type: 'Fighting',
+    category: 'Special',
+    isBullet: true,
+    secondaries: true,
+  },
+  'Form of the strawberry elephant': {
+    bp: 0,
+    type: 'Silly',
+    category: 'Status',
+    makesContact: true,
+  },
+  'Freak Out': {
+    bp: 80,
+    type: 'Silly',
+    category: 'Physical',
+    secondaries: true,
+  },
+  'Frigid Terrain': {
+    bp: 0,
+    type: 'Ice',
+    category: 'Status',
+  },
+  'Fuck Around and Find Out': {
+    bp: 120,
+    type: 'Silly',
+    category: 'Physical',
+    recoil: [1, 2],
+  },
+  'Future Sight': {
+    isFuture: true,
+  },
+  'Gender Affirming Care': {
+    bp: 0,
+    type: 'Silly',
+    category: 'Status',
+  },
+  'Get Em\', Boys': { // TODO: +10bp for each Diamond Hand member
+    bp: 100,
+    type: 'Normal',
+    category: 'Physical',
+  },
+  'Go Fish': {
+    bp: 0,
+    type: 'Water',
+    category: 'Status',
+    priority: 1,
+    isFishing: true,
+  },
+  'Goomba Stomp': {
+    bp: 100,
+    type: 'Normal',
+    category: 'Physical',
+    makesContact: true,
+    isKick: true,
+    secondaries: true,
+  },
+  'Gorging Missile': {
+    bp: 90,
+    type: 'Electric',
+    category: 'Special',
+    isFishing: true,
+  },
+  'Graveyard': {
+    bp: 0,
+    type: 'Ghost',
+    category: 'Status',
+  },
+  'Greatest Achievement': {
+    bp: 0,
+    type: 'Silly',
+    category: 'Status',
+    priority: 3,
+  },
+  'Hand of Space': {
+    bp: 100,
+    type: 'Water',
+    category: 'Special',
+  },
+  'Heart Drain': {
+    bp: 80,
+    type: 'Psychic',
+    category: 'Special',
+    drain: [1, 2],
+  },
+  'Heatwave': {
+    isDisaster: true,
+  },
+  'High Jump Kick': {
+    isKick: true,
+  },
+  'Hold Hands': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+  },
+  'Home Run': {
+    bp: 40,
+    type: 'Silly',
+    category: 'Physical',
+    priority: 1,
+  },
+  'Hurricane': {
+    bp: 110,
+    type: 'Flying',
+    category: 'Special',
+    secondaries: false,
+    isDisaster: true,
+  },
+  'Incinerate': {
+    bp: 65,
+    type: 'Fire',
+    category: 'Special',
+  },
+  'Inferno': {
+    isDisaster: true,
+  },
+  'Iron Fist': {
+    bp: 90,
+    type: 'Steel',
+    category: 'Physical',
+    isPunch: true,
+    makesContact: true,
+    secondaries: true,
+  },
+  'Juice Wave': {
+    bp: 80,
+    type: 'Lemon',
+    category: 'Special',
+    drain: [1, 2],
+  },
+  'Jump Kick': {
+    isKick: true,
+  },
+  'Jurassic Feast': {
+    bp: 80,
+    type: 'Rock',
+    category: 'Physical',
+    willCrit: true,
+    secondaries: true,
+  },
+  'Just The Birds: The Sequel': {
+    bp: 55,
+    type: 'Flying',
+    category: 'Special',
+    makesContact: true,
+    isWind: true,
+  },
+  'Justice Potion': {
+    bp: 0,
+    type: 'Psychic',
+    category: 'Status',
+    priority: -2,
+  },
+  'Kill Token': {
+    bp: 25,
+    type: 'Dark',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Krow Zone': {
+    bp: 0,
+    type: 'Dark',
+    category: 'Status',
+  },
+  'Lava Plume': {
+    isDisaster: true,
+  },
+  'Lemon Acid': {
+    bp: 80,
+    type: 'Lemon',
+    category: 'Special',
+    secondaries: true,
+  },
+  'Lemon Bash': {
+    bp: 85,
+    type: 'Lemon',
+    category: 'Physical',
+    makesContact: true,
+    secondaries: true,
+  },
+  'Lemon Throw': {
+    bp: 25,
+    type: 'Lemon',
+    category: 'Physical',
+    multihit: [2, 5],
+  },
+  'Lethal Hug': {
+    bp: 90,
+    type: 'Silly',
+    category: 'Physical',
+  },
+  'Lightning Strike': {
+    bp: 90,
+    type: 'Electric',
+    category: 'Physical',
+  },
+  'Lion Deluge': {
+    bp: 0,
+    type: 'Electric',
+    category: 'Status',
+  },
+  'Lone Shot': {
+    bp: 100,
+    type: 'Ground',
+    category: 'Physical',
+    isBullet: true,
+  },
+  'Looksmaxx Knuckle': {
+    bp: 70,
+    type: 'Fairy',
+    category: 'Physical',
+    makesContact: true,
+    isPunch: true,
+    secondaries: true,
+  },
+  'Low Kick': {
+    isKick: true,
+  },
+  'Low Sweep': {
+    isKick: true,
+  },
+  'Magma Storm': {
+    isDisaster: true,
+  },
+  'Magnitude': {
+    bp: 0,
+    type: 'Ground',
+    isDisaster: true,
+  },
+  'Make Lemonade': {
+    bp: 0,
+    type: 'Lemon',
+    category: 'Status',
+  },
+  'Mald Fist': {
+    bp: 50,
+    type: 'Ghost',
+    category: 'Physical',
+    isPunch: true,
+    makesContact: true,
+  },
+  'Mega Kick': {
+    isKick: true,
+  },
+  'Mewing': {
+    bp: 0,
+    type: 'Silly',
+    category: 'Status',
+    isProtect: true,
+    priority: 4,
+  },
+  'Minior Shower': {
+    bp: 110,
+    type: 'Stellar',
+    category: 'Special',
+  },
+  'Mog Off': {
+    bp: 90,
+    type: 'Silly',
+    category: 'Special',
+    secondaries: true,
+  },
+  'Muddy Water': {
+    isDisaster: true,
+  },
+  'Multi-Attack': {
+    bp: 120,
+    type: 'Normal',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Necromancy': {
+    bp: 60,
+    type: 'Ghost',
+    category: 'Special',
+  },
+  'Nose Honk': {
+    bp: 60,
+    type: 'Silly',
+    category: 'Special',
+    isSound: true,
+  },
+  'OH MY GOOOOD WAAAAAAAAAANISFOKIFNOUH': {
+    bp: 300,
+    type: 'Normal',
+    category: 'Physical',
+  },
+  'OH MY ROOOOD WAAAAAAAAAANISFOKIFNOUH': {
+    bp: 150,
+    type: 'Water',
+    category: 'Physical',
+    priority: 1,
+  },
+  'Parabolic Charge': {
+    bp: 75,
+    type: 'Electric',
+    category: 'Special',
+    drain: [1, 2],
+  },
+  'Pie Blast': {
+    bp: 80,
+    type: 'Silly',
+    category: 'Special',
+    secondaries: true,
+  },
+  'Piss on Grave': {
+    bp: 95,
+    type: 'Lemon',
+    category: 'Special',
+    isBullet: true,
+  },
+  'POG': {
+    bp: 60,
+    type: 'Steel',
+    category: 'Physical',
+  },
+  'Pyro Ball': {
+    isKick: true,
+  },
+  'Racism 2': {
+    bp: 82,
+    type: 'Dark',
+    category: 'Special',
+    isSound: true,
+    secondaries: true,
+  },
+  'Rainbow Feather': {
+    bp: 100,
+    type: 'Flying',
+    category: 'Physical',
+  },
+  'Recycle': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+  },
+  'Release the Bees': {
+    bp: 90,
+    type: 'Bug',
+    category: 'Special',
+  },
+  'Rock Slide': {
+    isDisaster: true,
+  },
+  'Rolling Kick': {
+    isKick: true,
+  },
+  'Sandsear Storm': {
+    isDisaster: true,
+  },
+  'Silcoon Blast': {
+    bp: 0,
+    type: 'Bug',
+    category: 'Status',
+  },
+  'silcoonsexactmovepool': {
+    bp: 0,
+    type: 'Bug',
+    category: 'Status',
+  },
+  'Single Iron Bash': {
+    bp: 111,
+    type: 'Steel',
+    category: 'Physical',
+    isPunch: true,
+    makesContact: true,
+    secondaries: true,
+  },
+  'Size Difference': {
+    bp: 100,
+    type: 'Ice',
+    category: 'Physical',
+  },
+  'Snag Phone': {
+    bp: 20,
+    type: 'Lemon',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Snift Gear': {
+    bp: 0,
+    type: 'Steel',
+    category: 'Status',
+  },
+  'Snowflake Shuriken': {
+    bp: 20,
+    type: 'Ice',
+    category: 'Special',
+    multihit: 3,
+    priority: 1,
+  },
+  'Sour Shot': {
+    bp: 85,
+    type: 'Lemon',
+    category: 'Physical',
+    isBullet: true,
+  },
+  'Space Laser': {
+    bp: 140,
+    type: 'Fire',
+    category: 'Special',
+  },
+  'Splash': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Status',
+    isFishing: true,
+  },
+  'Springtide Storm': {
+    bp: 120,
+    type: 'Fairy',
+    category: 'Special',
+    isWind: true,
+    isDisaster: true,
+    secondaries: true,
+  },
+  'Springy Fist': {
+    bp: 30,
+    type: 'Psychic',
+    category: 'Physical',
+    priority: 1,
+    makesContact: true,
+    isPunch: true,
+    secondaries: true,
+  },
+  'Stanky Leg': {
+    bp: 60,
+    type: 'Poison',
+    category: 'Physical',
+    makesContact: true,
+    isKick: true,
+    secondaries: true,
+  },
+  'Stealth Anvils': {
+    bp: 0,
+    type: 'Steel',
+    category: 'Status',
+  },
+  'Stomp': {
+    isKick: true,
+  },
+  'Stomping Tantrum': {
+    isKick: true,
+  },
+  'Super Mushroom': {
+    bp: 0,
+    type: 'Grass',
+    category: 'Status',
+    priority: 3,
+  },
+  'Surf': {
+    isDisaster: true,
+  },
+  'Swift Squirt': {
+    bp: 40,
+    type: 'Lemon',
+    category: 'Special',
+    priority: 1,
+  },
+  'The Kitchen Sink': {
+    bp: 76.6977492,
+    type: '???',
+    category: 'Physical',
+  },
+  'Thief': {
+    bp: 60,
+    type: 'Dark',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Thunder': {
+    isDisaster: true,
+  },
+  'Thunderous Kick': {
+    isKick: true,
+  },
+  'Throw \'Em A Mug': {
+    bp: 0,
+    type: 'Lemon',
+    category: 'Status',
+    priority: -2,
+  },
+  'Triple Kick': {
+    isKick: true,
+  },
+  'Tripler Kick': {
+    bp: 20,
+    type: 'Fighting',
+    category: 'Physical',
+    makesContact: true,
+    multihit: 3,
+    multiaccuracy: true,
+    isKick: true,
+  },
+  'Trop Kick': {
+    isKick: true,
+  },
+  'Trump Card': {
+    bp: 0,
+    type: 'Normal',
+    category: 'Special',
+  },
+  'Twineedle': {
+    bp: 25,
+    type: 'Bug',
+    category: 'Physical',
+    multihit: [2, 5],
+    secondaries: true,
+    makesContact: true,
+  },
+  'Twister': {
+    isDisaster: true,
+  },
+  'Two guys on the moon': {
+    bp: 85,
+    type: 'Rock',
+    category: 'Physical',
+  },
+  'Velvet Blade': {
+    bp: 90,
+    type: 'Dark',
+    category: 'Physical',
+    isSlicing: true,
+    makesContact: true,
+  },
+  'Vine Boom': {
+    bp: 50,
+    type: 'Bug',
+    category: 'Physical',
+    secondaries: true,
+  },
+  'Walk the Dog': {
+    bp: 40,
+    type: 'Ground',
+    category: 'Physical',
+  },
+  'Wario Picross Puzzle 4G': {
+    bp: 95,
+    type: 'Rock',
+    category: 'Special',
+    secondaries: true,
+  },
+  'Whirlwind': {
+    isDisaster: true,
+  },
+  'Wild Hunt': {
+    bp: 120,
+    type: 'Fairy',
+    category: 'Physical',
+    makesContact: true,
+  },
+  'Wildbolt Storm': {
+    isDisaster: true,
+  },
+  'Winged Blade': {
+    bp: 90,
+    type: 'Flying',
+    category: 'Physical',
+    isSlicing: true,
+  },
+  'Yoshi\'s Island': {
+    bp: 180,
+    type: 'Normal',
+    category: 'Physical',
+    target: 'allAdjacent',
+  },
+  'You Want Fun?!': {
+    bp: 65,
+    type: 'Dark',
+    category: 'Physical',
+    priority: -6,
+  },
+  'Zekrom Kick': {
+    bp: 45,
+    type: 'Dragon',
+    category: 'Physical',
+    makesContact: true,
+    isKick: true,
+  },
+  'Zesty Cutter': {
+    bp: 80,
+    type: 'Lemon',
+    category: 'Physical',
+    isSlicing: true,
+  },
+};
+const GLACE: {[name: string]: MoveData} = extend(true, {}, SV, GLACE_PATCH);
+
+const TM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
+  'G-Max Befuddle': {
+    bp: 140,
+  },
+  'G-Max Cannonade': {
+    bp: 110,
+  },
+  'G-Max Centiferno': {
+    bp: 120,
+  },
+  'G-Max Chi Strike': {
+    bp: 140,
+  },
+  'G-Max Cuddle': {
+    bp: 120,
+  },
+  'G-Max Depletion': {
+    bp: 120,
+  },
+  'G-Max Drum Solo': {
+    bp: 120,
+  },
+  'G-Max Finale': {
+    bp: 120,
+  },
+  'G-Max Fireball': {
+    bp: 90,
+  },
+  'G-Max Foam Burst': {
+    bp: 130,
+  },
+  'G-Max Gold Rush': {
+    bp: 40,
+    multihit: [2, 5],
+  },
+  'G-Max Gravitas': {
+    bp: 140,
+  },
+  'G-Max Hydrosnipe': {
+    bp: 80,
+  },
+  'G-Max Malodor': {
+    bp: 140,
+  },
+  'G-Max Meltdown': {
+    bp: 150,
+  },
+  'G-Max One Blow': {
+    bp: 105,
+  },
+  'G-Max Rapid Flow': {
+    bp: 35,
+    multihit: 3,
+  },
+  'G-Max Replenish': {
+    bp: 110,
+  },
+  'G-Max Resonance': { // TODO: SE on Water
+    bp: 110,
+  },
+  'G-Max Sandblast': {
+    bp: 120,
+  },
+  'G-Max Smite': {
+    bp: 110,
+  },
+  'G-Max Snooze': { // TODO: Pursuit effect
+    bp: 50,
+  },
+  'G-Max Steelsurge': {
+    bp: 110,
+  },
+  'G-Max Stonesurge': {
+    bp: 120,
+  },
+  'G-Max Stun Shock': { // TODO: Physical if non-lowkey
+    bp: 120,
+  },
+  'G-Max Sweetness': {
+    bp: 130,
+  },
+  'G-Max Tartness': {
+    bp: 130,
+  },
+  'G-Max Terror': {
+    bp: 120,
+  },
+  'G-Max Vine Lash': {
+    bp: 110,
+  },
+  'G-Max Volcalith': {
+    bp: 130,
+  },
+  'G-Max Volt Crash': {
+    bp: 150,
+  },
+  'G-Max Wildfire': {
+    bp: 110,
+  },
+  'G-Max Wind Rage': {
+    bp: 110,
+  },
+};
+const TM: {[name: string]: MoveData} = extend(true, {}, SV, TM_PATCH);
+
+for (const j of Object.keys(TM)) {
+  const i = TM[j];
+  if (['Counter', 'Seismic Toss'].includes(j)) {
+    i.maxPower = 65;
+  } else if (['Triple Kick', 'Double Kick'].includes(j)) {
+    i.maxPower = 70;
+  } else if (['Night Shade', 'Super Fang', 'Present', 'Mirror Coat', 'Beat Up', 'Spit Up',
+    'Metal Burst', 'Fling', 'Nature\'s Madness'].includes(j)) {
+    i.maxPower = 80;
+  } else if (['Low Kick', 'Reversal', 'Final Gambit'].includes(j)) {
+    i.maxPower = 90;
+  } else if (['Guillotine', 'Horn Drill', 'Fissure', 'Sheer Cold', 'Flail', 'Endeavor',
+    'Gyro Ball', 'Grass Knot', 'Heavy Slam', 'Electro Ball', 'Heat Crash', 'Stored Power',
+    'Power Trip', 'Arm Thrust', 'Water Shuriken', 'Fury Swipes', 'Pin Missile', 'Bone Rush',
+    'Bullet Seed', 'Icicle Spear', 'Rock Blast', 'Tail Slap', 'Scale Shot',
+    'Surging Strikes'].includes(j)) {
+    i.maxPower = 110;
+  } else if (['Crush Grip', 'Triple Axel'].includes(j)) {
+    i.maxPower = 120;
+  } else if (i.bp >= 10 && i.bp <= 40) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 60 : 70;
+  } else if (i.bp <= 50) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 65 : 80;
+  } else if (i.bp <= 60) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 70 : 90;
+  } else if (i.bp <= 70) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 75 : 100;
+  } else if (i.bp <= 100) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 80 : 110;
+  } else if (i.bp <= 140) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 85 : 120;
+  } else if (i.bp <= 250) {
+    i.maxPower = ['Fighting', 'Poison', 'Flying'].includes(i.type) ? 90 : 130;
+  } else {
+    i.maxPower = 0;
+  }
+}
+
+
 // @ts-expect-error readonly
 delete CHAMPIONS['Freeze-Dry'].secondaries;
 
 export const MOVES = [CHAMPIONS, RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV, JS, BWYB, TH, MH, SV,
-  SV, PM, SV, SV, SV, FEVGC, SV, MEGASR, IF, SV, SV];
+  SV, PM, SV, SV, SV, FEVGC, SV, MEGASR, IF, SV, SV, GLACE, TM]; // New Gen Change
 
 export class Moves implements I.Moves {
   private readonly gen: I.GenerationNum;

@@ -17,6 +17,8 @@ import {calculateBWFYB} from './mechanics/bestwishes';
 import {calculateFEVGC} from './mechanics/fevgc';
 import {calculateMEGASR} from './mechanics/megasrevisited';
 import {calculateIF} from './mechanics/ironfist';
+import {calculateGLACE} from './mechanics/glacemons';
+import {calculateTM} from './mechanics/teramax';
 
 const MECHANICS = [
   calculateChampions,
@@ -45,6 +47,8 @@ const MECHANICS = [
   calculateIF, // Iron Fist
   calculateSMSSSV, // FE SV
   calculateSMSSSV, // BC D
+  calculateGLACE, // Glacemons
+  calculateTM, // Teramax
 ]; // NewGenChange
 
 export function calculate(

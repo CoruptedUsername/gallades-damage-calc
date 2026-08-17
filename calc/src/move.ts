@@ -275,7 +275,9 @@ export function getMaxMoveName(
     if (pokemonAbility === 'Refrigerate') moveType = 'Ice';
     if (pokemonAbility === 'Galvanize') moveType = 'Electric';
   }
-  if (isGmax && moveType === gen.moves.get(toID(isGmax))!.type) {
+  if (gen.num === 27 && isGmax && !!moveName && TM_GMAX_MOVES[moveName] === isGmax) {
+    return isGmax;
+  } else if (gen.num !== 27 && isGmax && moveType === gen.moves.get(toID(isGmax))!.type) {
     return isGmax;
   }
   return 'Max ' + MAXMOVES_TYPING[moveType];
@@ -302,4 +304,40 @@ const MAXMOVES_TYPING: {
   Rock: 'Rockfall',
   Steel: 'Steelspike',
   Water: 'Geyser',
+};
+
+const TM_GMAX_MOVES: { [id: string]: string } = {
+  'Frenzy Plant': 'G-Max Vine Lash',
+  'Blast Burn': 'G-Max Wildfire',
+  'Hydro Cannon': 'G-Max Cannonade',
+  'Pollen Puff': 'G-Max Befuddle',
+  'Volt Tackle': 'G-Max Volt Crash',
+  'Pay Day': 'G-Max Gold Rush',
+  'Dynamic Punch': 'G-Max Chi Strike',
+  'Shadow Ball': 'G-Max Terror',
+  'Crabhammer': 'G-Max Foam Burst',
+  'Freeze-Dry': 'G-Max Resonance',
+  'Last Resort': 'G-Max Cuddle',
+  'Body Slam': 'G-Max Replenish',
+  'Gunk Shot': 'G-Max Malodor',
+  'Double Iron Bash': 'G-Max Meltdown',
+  'Drum Beating': 'G-Max Drum Solo',
+  'Pyro Ball': 'G-Max Fireball',
+  'Snipe Shot': 'G-Max Hydrosnipe',
+  'Brave Bird': 'G-Max Windrage',
+  'Psychic': 'G-Max Gravitas',
+  'Razor Shell': 'G-Max Stonesurge',
+  'Tar Shot': 'G-Max Volcalith',
+  'Grav Apple': 'G-Max Tartness',
+  'Appletun': 'G-Max Sweetness',
+  'Sand Tomb': 'G-Max Sandblast',
+  'Fire Lash': 'G-Max Centiferno',
+  'Overdrive': 'G-Max Stun Shock',
+  'Dazzling Gleam': 'G-Max Smite',
+  'False Surrender': 'G-Max Snooze',
+  'Draining Kiss': 'G-Max Finale',
+  'Heavy Slam': 'G-Max Steelsurge',
+  'Draco Meteor': 'G-Max Depletion',
+  'Wicked Blow': 'G-Max One Blow',
+  'Surging Strikes': 'G-Max Rapid Flow',
 };

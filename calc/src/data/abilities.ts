@@ -1380,8 +1380,18 @@ const FESV = [
   'Winter Storm',
 ];
 
+// Glacemons
+const GLACE = SV.concat([
+  '',
+]);
+
+// Teramax
+const TM = SV.concat([
+  '',
+]);
+
 export const ABILITIES = [CHAMPIONS, RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV, RBY, BWYB, TH, MH, SV,
-  TS, PM, SV, SV, SV, FEVGC, SV, MEGASR, IF, FESV, SV]; // NewGenChange
+  TS, PM, SV, SV, SV, FEVGC, SV, MEGASR, IF, FESV, SV, GLACE, TM]; // NewGenChange
 
 export class Abilities implements I.Abilities {
   private readonly gen: I.GenerationNum;

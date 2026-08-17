@@ -37,7 +37,7 @@ function endsWith(string, target) {
 
 var LEGACY_STATS_RBY = ["hp", "at", "df", "sl", "sp"];
 var LEGACY_STATS_GSC = ["hp", "at", "df", "sa", "sd", "sp"];
-var LEGACY_STATS = [LEGACY_STATS_GSC, LEGACY_STATS_RBY, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC]; // NewGenChange
+var LEGACY_STATS = [LEGACY_STATS_GSC, LEGACY_STATS_RBY, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC]; // NewGenChange
 var HIDDEN_POWER_REGEX = /Hidden Power (\w*)/;
 
 var CALC_STATUS = {
@@ -408,19 +408,17 @@ $(".ability").bind("keyup change", function () {
 			$(this).closest(".poke-info").find(".bigToggle").prev("label").hide();
 			$(this).closest(".poke-info").find(".bigToggle").hide();
 			$(this).closest(".poke-info").find(".bigToggle").prop("checked", false);
-			$(this).closest(".poke-info").find(".teraType").prev("label").show();
-			$(this).closest(".poke-info").find(".teraType").show();
+			$(this).closest(".poke-info").find(".teraType").parent().show();
 			$(this).closest(".poke-info").find(".teraType").val(forcedTeraType);
-			$(this).closest(".poke-info").find(".teraToggle").show();
 		} else {
 			$(this).closest(".poke-info").find(".bigToggle").prev("label").show();
 			$(this).closest(".poke-info").find(".bigToggle").show();
-			$(this).closest(".poke-info").find(".teraType").prev("label").hide();
-			$(this).closest(".poke-info").find(".teraType").hide();
+			$(this).closest(".poke-info").find(".teraType").parent().hide();
 			$(this).closest(".poke-info").find(".teraType").val($(this).closest(".poke-info").find(".type1").val());
-			$(this).closest(".poke-info").find(".teraToggle").hide();
 			$(this).closest(".poke-info").find(".teraToggle").prop("checked", false);
 		}
+	} else if ([9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27].includes(gen)) {
+		$(this).closest(".poke-info").find(".teraType").parent().show();
 	}
 
 	for (var i = 1; i <= 4; i++) {
@@ -925,12 +923,31 @@ $(".move-selector").change(function () {
 $(".item").change(function () {
 	var itemName = $(this).val();
 	var pokeObj = $(this).closest('.poke-info');
+	var pokemonName = pokeObj.find("input.set-selector").val().substring(0, pokeObj.find("input.set-selector").val().indexOf(" ("));
+	var pokemon = pokedex[pokemonName];
 
 	var $metronomeControl = pokeObj.find('.metronome');
 	if (itemName === "Metronome") {
 		$metronomeControl.show();
 	} else {
 		$metronomeControl.hide();
+	}
+
+	if (gen === 27) {
+		if (itemName === "Wishing Stone") {
+			pokeObj.find(".max").next().show();
+			if (pokemon.canGigantamax) {
+				pokeObj.find(".gmaxToggle").parent().show();
+			}
+			pokeObj.find(".teraToggle").prop("checked", false);
+			pokeObj.find(".teraToggle").parent().hide();
+		} else {
+			pokeObj.find(".max").prop("checked", false);
+			pokeObj.find(".max").next().hide();
+			pokeObj.find(".gmaxToggle").prop("checked", false);
+			pokeObj.find(".gmaxToggle").parent().hide();
+			pokeObj.find(".teraToggle").parent().show();
+		}
 	}
 
 	if (itemName === "Flame Orb") {
@@ -969,7 +986,7 @@ $(".item").change(function () {
 });
 
 function smogonAnalysis(pokemonName) { // NewGenChange
-	var generation = ["champions", "rb", "gs", "rs", "dp", "bw", "xy", "sm", "ss", "sv", "js", "bwyb", "th", "mh", "sbs", "ts", "pm", "dnu", "bca", "bcc", "fevgc", "mmm4", "megasr", "if", "fesv", 'bcd'][gen];
+	var generation = ["champions", "rb", "gs", "rs", "dp", "bw", "xy", "sm", "ss", "sv", "js", "bwyb", "th", "mh", "sbs", "ts", "pm", "dnu", "bca", "bcc", "fevgc", "mmm4", "megasr", "if", "fesv", 'bcd', 'glace', 'tm'][gen];
 	if (pokemonName === "Aegislash-Shield" || pokemonName === "Aegislash-Both") pokemonName = "Aegislash";
 	return "https://smogon.com/dex/" + generation + "/pokemon/" + pokemonName.toLowerCase() + "/";
 }
@@ -1545,6 +1562,7 @@ function createPokemon(pokeInfo) {
 		var item = pokeInfo.find(".item").val();
 		var gender = pokeInfo.find(".gender").val();
 		var isDynamaxed = pokeInfo.find(".max").prop("checked");
+		var isGmaxed = pokeInfo.find(".gmaxToggle").prop("checked");
 		var isBig = pokeInfo.find(".bigToggle").prop("checked");
 		var overrideMove;
 		if (isDynamaxed && pokeInfo.find(".gmaxToggle").prop("checked")) {
@@ -1567,7 +1585,13 @@ function createPokemon(pokeInfo) {
 		calcHP(pokeInfo);
 		var curHP = ~~pokeInfo.find(".current-hp").val();
 		// FIXME the Pokemon constructor expects non-dynamaxed HP
-		if (pokeInfo.isDynamaxed) curHP = Math.floor(curHP / 2);
+		if (gen === 27) {
+			if (isDynamaxed && isGmaxed) {
+				curHP = Math.floor(curHP / 1.5);
+			} else if (isDynamaxed) {
+				curHP = Math.floor(curHP / 2);
+			}
+		} else if (pokeInfo.isDynamaxed) curHP = Math.floor(curHP / 2);
 		var types = [pokeInfo.find(".type1").val(), pokeInfo.find(".type2").val(), pokeInfo.find(".type3").val(),
 			pokeInfo.find(".type4").val()];
 		return new calc.Pokemon(gen, name, {
@@ -1817,6 +1841,7 @@ function calcStat(poke, StatID) {
 	var base = ~~stat.find(".base").val();
 	var level = ~~poke.find(".level").val();
 	var evs = ~~stat.find(".evs").val();
+	var gmax = ~~poke.find(".gmaxToggle").prop("checked");
 	var nature, ivs;
 	if (gen === 0) {
 		level = 50;
@@ -1831,7 +1856,9 @@ function calcStat(poke, StatID) {
 	}
 	// Shedinja still has 1 max HP during the effect even if its Dynamax Level is maxed (DaWoblefet)
 	var total = calc.calcStat(gen, legacyStatToStat(StatID), base, ivs, evs, level, nature);
-	if (gen > 7 && StatID === "hp" && poke.isDynamaxed && total !== 1) {
+	if (gen === 27 && StatID === "hp" && poke.isDynamaxed && gmax && total !== 1) {
+		total = Math.floor(total * 1.5);
+	} else if (gen > 7 && StatID === "hp" && poke.isDynamaxed && total !== 1) {
 		total *= 2;
 	}
 	stat.find(".total").text(total);
@@ -1864,6 +1891,8 @@ var GENERATION = {
 	'23': 23, 'if': 23,
 	'24': 24, 'fesv': 24,
 	'25': 25, 'bcd': 25,
+	'26': 26, 'glace': 26,
+	'27': 27, 'tm': 27,
 }; // NewGenChange
 
 var SETDEX = [
@@ -1892,7 +1921,9 @@ var SETDEX = [
 	typeof SETDEX_MEGASR === 'undefined' ? {} : SETDEX_MEGASR,
 	typeof SETDEX_IF === 'undefined' ? {} : SETDEX_IF,
 	{},
-	typeof SETDEX_BCD === 'undefined' ? {} : SETDEX_BCD
+	typeof SETDEX_BCD === 'undefined' ? {} : SETDEX_BCD,
+	typeof SETDEX_GLACE === 'undefined' ? {} : SETDEX_GLACE,
+	typeof SETDEX_TM === 'undefined' ? {} : SETDEX_TM
 ]; // NewGenChange
 
 /*
@@ -1983,8 +2014,11 @@ var RANDDEX = [
 	GEN9RANDSETS, // Megas Revisited
 	GEN9RANDSETS, // Iron Fist
 	GEN9RANDSETS, // FE SV
+	GEN9RANDSETS, // BC Meta D
+	GEN9RANDSETS, // Glacemons
+	GEN9RANDSETS, // Teramax
 	{},
-]; // New Gen Change
+]; // NewGenChange
 var gen, genWasChanged, notation, pokedex, setdex, randdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION;
 
 $(".gen").change(function () {

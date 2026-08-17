@@ -927,7 +927,8 @@ export function getStabMod(pokemon: Pokemon, move: Move, desc: RawDesc) {
   }
   const teraType = pokemon.teraType;
   if (teraType === move.type && teraType !== 'Stellar') {
-    stabMod += 2048;
+    stabMod += pokemon.gen.num === 27 && !(pokemon.hasAbility('Adaptability') &&
+      pokemon.hasType(move.type)) ? 1024 : 2048;
     desc.attackerTera = teraType;
   }
   if (pokemon.hasAbility('Adaptability', 'Night Vision') && pokemon.hasType(move.type)) {

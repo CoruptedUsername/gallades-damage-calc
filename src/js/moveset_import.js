@@ -241,6 +241,8 @@ function addToDex(poke) {
 		if (GEN2RANDOMBATTLE[poke.name] == undefined) GEN2RANDOMBATTLE[poke.name] = {};
 		if (GEN1RANDOMBATTLE[poke.name] == undefined) GEN1RANDOMBATTLE[poke.name] = {};
 	} else { // NewGenChange
+		if (SETDEX_TM[poke.name] == undefined) SETDEX_TM[poke.name] = {};
+		if (SETDEX_GLACE[poke.name] == undefined) SETDEX_GLACE[poke.name] = {};
 		if (SETDEX_BCD[poke.name] == undefined) SETDEX_BCD[poke.name] = {};
 		if (SETDEX_IF[poke.name] == undefined) SETDEX_IF[poke.name] = {};
 		if (SETDEX_MEGASR[poke.name] == undefined) SETDEX_MEGASR[poke.name] = {};
@@ -306,6 +308,10 @@ function addToDex(poke) {
 function updateDex(customsets) {
 	for (var pokemon in customsets) {
 		for (var moveset in customsets[pokemon]) { // NewGenChange
+			if (!SETDEX_TM[pokemon]) SETDEX_TM[pokemon] = {};
+			SETDEX_TM[pokemon][moveset] = customsets[pokemon][moveset];
+			if (!SETDEX_GLACE[pokemon]) SETDEX_GLACE[pokemon] = {};
+			SETDEX_GLACE[pokemon][moveset] = customsets[pokemon][moveset];
 			if (!SETDEX_BCD[pokemon]) SETDEX_BCD[pokemon] = {};
 			SETDEX_BCD[pokemon][moveset] = customsets[pokemon][moveset];
 			if (!SETDEX_IF[pokemon]) SETDEX_IF[pokemon] = {};

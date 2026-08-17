@@ -22,8 +22,10 @@
         "lastManualStatus": false,
         "lastAutoStatus": false,
         "startsWith": false,
-        "notation": true,
+        "notation": true, // NewGenChange
         "SETDEX_CHAMPIONS": false,
+		  "SETDEX_TM": false,
+		  "SETDEX_GLACE": false,
 		  "SETDEX_PM": false,
 		  "SETDEX_MEGASR": false,
 		  "SETDEX_IF": false,
